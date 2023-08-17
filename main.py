@@ -7,7 +7,7 @@ import whisper
 import firebase_admin
 from firebase_admin import credentials, db
 
-model_wis = whisper.load_model("tiny")
+model_wis = whisper.load_model("tiny.en")
 
 absolute_path = os.path.dirname(__file__)
 static_dir = os.path.join(os.path.dirname(__file__))
@@ -40,17 +40,18 @@ async def create_upload_file(file: UploadFile = File(...)):
     var_name = full_path+file.filename # path to the uploaded file
     result = model_wis.transcribe(var_name)
     var_item = result['text'].split()
-    text = var_item
+    separator = " "
+    text = separator.join(var_item)
     ref = db.reference("order")
-    for i in range (len(text)) : 
-        text[i].lower()
-        if ( text[i] == 'm' or text[i] == 'M')  :
+    for i in text : 
+        i.lower()
+        if ( i == 'm' or i == 'M')  :
             ref.set(int(1))
             break
-        elif ( text[i] == 'g' or text[i] == 'G')  :
+        elif ( i == 'g' or i == 'G')  :
             ref.set(int(2))
             break
-        elif ( text[i] == 'b' or text[i] == 'B')  :
+        elif ( i == 'b' or i == 'B')  :
             ref.set(int(3))
             break
         
