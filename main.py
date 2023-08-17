@@ -54,4 +54,4 @@ async def create_upload_file(file: UploadFile = File(...)):
             ref.set(int(3))
             break
         
-    return {'results': result}
+    print(text)
