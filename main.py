@@ -40,17 +40,18 @@ async def create_upload_file(file: UploadFile = File(...)):
     var_name = full_path+file.filename # path to the uploaded file
     result = model_wis.transcribe(var_name)
     var_item = result['text'].split()
-    text = var_item.lower()
+    text = var_item
     ref = db.reference("order")
     for i in range (len(text)) : 
-        if ( text[i] == 'm' )  :
-            if ( text[i+1] =='o' and text[i+2] == 'v' or text[i+3] == 'e' ) :
-                ref.set(int(1))
-        elif ( text[i] == 'g' )  :
-            if ( text[i+1] == 'r' and text [i+2] =='a' and text [i+3] == 'p' ) :
-                ref.set(int(2))
-        elif ( text[i] == 'b' )  :
-            if ( text[i+1] =='y' and text[i+2]=='e' ) :
-                ref.set(int(3))
+        text[i].lower()
+        if ( text[i] == 'm' or text[i] == 'M')  :
+            ref.set(int(1))
+            break
+        elif ( text[i] == 'g' or text[i] == 'G')  :
+            ref.set(int(2))
+            break
+        elif ( text[i] == 'b' or text[i] == 'B')  :
+            ref.set(int(3))
+            break
         
     return {'results': result}
